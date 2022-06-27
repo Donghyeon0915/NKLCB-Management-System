@@ -6,6 +6,7 @@ package Main;
 
 import Main.crawler.BaekjoonCrawler;
 import Main.crawler.Crawler;
+import Main.entity.Group;
 import Main.util.CookieManager;
 import java.awt.datatransfer.*;
 import java.io.FileOutputStream;
@@ -14,6 +15,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -47,34 +49,13 @@ public class Main {
         BaekjoonCrawler crawler = new BaekjoonCrawler();
         
 		try {
-            driver = crawler.loginToBaekjoon("dongdong99", "blue795132486");
-            
-            Map<String, String> cookies = CookieManager.convertCookieMap(crawler.getCookie());
-            
-            Document doc = Jsoup.connect("https://www.acmicpc.net/group/list")
-                 .cookies(cookies)
-                 .get();
-            
-            Elements tr = doc.select("#ranklist").select("tbody").select("tr");
-            
-            for (Element e : tr) {
-                Elements aTag = e.select("a");
-                System.out.println("Group No. : " + aTag.get(0).attr("href"));
-                System.out.println("Group Name : " + aTag.get(0).text());
-                System.out.println("Group Master : " + aTag.get(1).text());
-                System.out.println("Memeber : " + e.select("td").get(2).text());
+            driver = crawler.login("dongdong99", "blue795132486");
+
+            for (Group group : crawler.getGroupList()) {
+                System.out.println(group);
             }
             
-            // 게시글 작성할 때마다 csrf 토큰이 갱신 됨 (게시글 데이터와 같이 보내줘야 함)
-            Document writePage = Jsoup.connect("https://www.acmicpc.net/group/board/write/12975").cookies(cookies).get();
-            String csrf = writePage.select("input[name=csrf_key]").attr("value");
-            
-            Jsoup.connect("https://www.acmicpc.net/group/board/write/12975")
-                 .cookies(cookies)
-                 .data("board-subject", "jsoup으로 작성2")
-                 .data("board-content", "jsoup으로 작성2")
-                 .data("csrf_key", csrf)
-                 .post();
+            crawler.getPracticeResult("12975", "2");
             
 		} catch (Exception e) {
 			e.printStackTrace();

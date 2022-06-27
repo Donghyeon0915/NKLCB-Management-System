@@ -51,5 +51,11 @@ public class WindowController {
         robot.keyRelease(KeyEvent.VK_CONTROL);
         robot.keyRelease(KeyEvent.VK_V);
     }
+    
+    public void tab(){
+        robot.keyPress(KeyEvent.VK_TAB);
+        
+        robot.keyRelease(KeyEvent.VK_TAB);
+    }
 
 }

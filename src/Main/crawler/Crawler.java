@@ -55,5 +55,6 @@ public class Crawler {
     public WebElement explicitWait(By locator){
         return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
     }
+    
     public static WebDriver getDriver() { return driver; }
 }

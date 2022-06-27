@@ -4,7 +4,10 @@
  */
 package Main.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 /**
@@ -14,8 +17,11 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Group {
-    private String groupLink;
+    private String groupNumber;
     private String groupName;
     private String groupMaster;
     private int members;
