@@ -3,10 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/Users/dongh/OneDrive/문서/NetBeansProjects/BaekjoonParser/src/Main/entity/Group.java</file>
             <file>file:/C:/Users/dongh/OneDrive/문서/NetBeansProjects/BaekjoonParser/src/Main/crawler/BaekjoonCrawler.java</file>
+            <file>file:/C:/Users/dongh/OneDrive/문서/NetBeansProjects/BaekjoonParser/src/Main/util/WindowController.java</file>
             <file>file:/C:/Users/dongh/OneDrive/문서/NetBeansProjects/BaekjoonParser/src/Main/util/ClipboardManager.java</file>
             <file>file:/C:/Users/dongh/OneDrive/문서/NetBeansProjects/BaekjoonParser/src/Main/crawler/Crawler.java</file>
             <file>file:/C:/Users/dongh/OneDrive/문서/NetBeansProjects/BaekjoonParser/src/Main/Main.java</file>
+            <file>file:/C:/Users/dongh/OneDrive/문서/NetBeansProjects/BaekjoonParser/src/Main/util/CookieManager.java</file>
         </group>
     </open-files>
 </project-private>

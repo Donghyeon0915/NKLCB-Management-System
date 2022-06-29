@@ -5,43 +5,27 @@
 package Main.crawler;
 
 import static Main.crawler.Crawler.driver;
+import Main.entity.Grade;
 import Main.entity.Group;
 import Main.util.ClipboardManager;
 import Main.util.CookieManager;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Cookie;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.json.Json;
-import org.openqa.selenium.support.ui.ExpectedCondition;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.FluentWait;
-import org.openqa.selenium.support.ui.Wait;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 /**
  *
@@ -56,27 +40,38 @@ public class BaekjoonCrawler extends Crawler {
     protected Map<String, String> cookies;  
     private static WebElement element;
     
+    // 채점 결과 매핑
+    private Map<String, String> status = new HashMap<>(){
+                {
+                    put("accepted", "✅");       // 체크 이모지 [&#9989;]
+                    put("wronganswer", "❌");    // 오답 이모지 [&#10060;]
+                }  
+            };
+    
     public WebDriver login(String id, String pw) {
         try {
             String url = "https://www.acmicpc.net/login?next=%2F";
             driver.get(url);
-            
-            // 아이디 입력
-            element = driver.findElement(By.name("login_user_id"));
-            
-            ClipboardManager.setClipboard(id);
-            element.sendKeys(Keys.CONTROL + "v");
-            
-            Thread.sleep(500);
-            // 패스워드 입력
-            element = driver.findElement(By.name("login_password"));
-            
-            ClipboardManager.setClipboard(pw);
-            element.sendKeys(Keys.CONTROL + "v");
-            
-            Thread.sleep(500);
-            //로그인 버튼 클릭
-            driver.findElement(By.id("submit_button")).click();
+//            
+//            // 아이디 입력
+//            element = driver.findElement(By.name("login_user_id"));
+//            
+//            ClipboardManager.setClipboard(id);
+//            element.sendKeys(Keys.CONTROL + "v");
+//            
+//            Thread.sleep(500);
+//            // 패스워드 입력
+//            element = driver.findElement(By.name("login_password"));
+//            
+//            ClipboardManager.setClipboard(pw);
+//            element.sendKeys(Keys.CONTROL + "v");
+//            
+//            Thread.sleep(500);
+//            //로그인 버튼 클릭
+//            driver.findElement(By.id("submit_button")).click();
+
+            // 로그인이 완료 될 때까지 기다림
+            explicitWait(By.className("username"));
             
             // 로그인 후 쿠키 저장 (Map 형태로 변환)
             this.cookies = CookieManager.convertCookieMap(driver.manage().getCookies());
@@ -152,16 +147,32 @@ public class BaekjoonCrawler extends Crawler {
                                 .cookies(cookies)
                                 .get();
             
-            Elements table = doc.select("#contest_scoreboard").select("tbody").select("tr");
+            // 채점 결과 테이블 가져오기
+            Element table = doc.selectFirst(".table-responsive");
             
-            for (Element tr : table) {
+            for (Element tr : table.select("tbody > tr")) {
+                
                 for (Element td : tr.select("td")) {
-                    System.out.println("".equals(td.className()) ? "None" : td.className());
+                    
+                    // 클래스 이름이 없는 경우 미제출
+                    if("".equals(td.className())){
+                        td.empty();
+                        td.appendText("-");
+                    }
+                    else{  // 클래스 이름이 있는 경우 채점 결과에 따라 이모지 설정
+                        td.empty();
+                        td.appendText(status.get(td.className()));
+                    }
                 }
             }
             
+            System.out.println(table);
         } catch (IOException ex) {
             Logger.getLogger(BaekjoonCrawler.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public void setGradingResults(/* 채점 결과 테이블 받기 */){
+        // Grade 클래스를 이용하여 인원별 맞춘 문제 개수 / 총 시도 횟수( or 제출 횟수)를 체크하면 좋을 듯
     }
 }

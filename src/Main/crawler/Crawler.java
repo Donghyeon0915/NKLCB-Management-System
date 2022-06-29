@@ -43,13 +43,13 @@ public class Crawler {
         options.addArguments("--disable-popup-blocking");                       // 팝업 안띄움
         options.addArguments("-no-sandbox");    
         options.addArguments("--disable-gpu");                                   // GPU 비활성화
-        options.addArguments("--blink-settings=imagesEnabled=false");         // 이미지 다운 안받음
+//        options.addArguments("--blink-settings=imagesEnabled=false");         // 이미지 다운 안받음
         options.addArguments("lang=ko_KR");                                      // 한국어 설정
         options.addArguments("user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36");
             
         driver = new ChromeDriver(options);
         
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(1000));
     }
         
     public WebElement explicitWait(By locator){
